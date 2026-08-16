@@ -135,7 +135,6 @@ These are not styling decisions — changing them has legal consequences in Indi
 |---|---|
 | Domain, and the four routed inboxes | `src/data/site.ts` → `SITE.domain` |
 | Registered office address, CIN, phone, WhatsApp number | `src/data/site.ts` |
-| Eight founder names, designations, bios and 1:1 portraits (800×800 min) | `src/app/team/page.tsx`, `src/app/about/page.tsx` |
 | Manufacturing partner name, address and licence number per product | `src/app/products/[slug]/page.tsx` |
 | Storage statement and shelf life per product | `src/data/products.ts` |
 | Legal effective dates, retention periods, jurisdiction | `src/data/legal.ts` |

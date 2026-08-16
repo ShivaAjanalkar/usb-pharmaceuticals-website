@@ -27,7 +27,7 @@ export default function CareersPage() {
         >
           <div>
             <p className="lead" style={{ marginBottom: 20, maxWidth: "56ch" }}>
-              Eight people cannot build a pharmaceutical company. We are hiring
+              A small team cannot build a pharmaceutical company alone. We are hiring
               for judgement, not headcount.
             </p>
             <p className="prose" style={{ maxWidth: "64ch" }}>

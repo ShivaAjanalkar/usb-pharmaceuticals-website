@@ -1092,8 +1092,6 @@ textarea.control { resize: vertical; line-height: 1.55; }
 @media (max-width: 1080px) {
   .hairline-grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  [data-founders="row"] { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-  [data-founders="full"] { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 }
 
 @media (max-width: 900px) {
@@ -1118,6 +1116,4 @@ textarea.control { resize: vertical; line-height: 1.55; }
   .footer__cols { grid-template-columns: minmax(0, 1fr); }
   .filters__row { grid-template-columns: minmax(0, 1fr); }
   .filters__row > span { padding-top: 0; }
-  [data-founders="row"],
-  [data-founders="full"] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }

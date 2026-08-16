@@ -15,7 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/products/", 0.9],
     ["/services/", 0.8],
     ["/quality/", 0.8],
-    ["/team/", 0.6],
     ["/careers/", 0.6],
     ["/contact/", 0.7],
   ] as const;

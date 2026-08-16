@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import Octagon from "@/components/Octagon";
 import PageHead from "@/components/PageHead";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Who USB Pharmaceuticals is, why eight people started it, and exactly what the company does and does not do.",
+    "Who USB Pharmaceuticals is, why it was founded, and exactly what the company does and does not do.",
 };
 
 const VALUES = [
@@ -24,7 +22,7 @@ export default function AboutPage() {
       <PageHead
         kicker="01 · About"
         title="A company designed to be checked, not admired."
-        sub="Who USB Pharmaceuticals is, why eight people started it, and exactly what the company does and does not do."
+        sub="Who USB Pharmaceuticals is, why it was founded, and exactly what the company does and does not do."
       />
 
       <section className="section">
@@ -37,7 +35,7 @@ export default function AboutPage() {
               Science for Better Life.
             </p>
             <p className="prose">
-              The company was founded by eight professionals who had each spent
+              The company was founded by professionals who had each spent
               years inside the Indian pharmaceutical trade — in formulation
               selection, quality assurance, regulatory documentation,
               distribution and field marketing — and who kept meeting the same
@@ -60,9 +58,9 @@ export default function AboutPage() {
               state that plainly to a partner than pad the page.
             </p>
             <p className="prose">
-              What is settled is the structure: a private limited company, eight
-              accountable founders, a third-party manufacturing model, and an
-              Indian domestic market focus with export capability to follow.
+              What is settled is the structure: a private limited company, a
+              third-party manufacturing model, and an Indian domestic market
+              focus with export capability to follow.
             </p>
           </div>
         </div>
@@ -135,76 +133,6 @@ export default function AboutPage() {
                 </p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="shell section__body">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-              gap: 24,
-              flexWrap: "wrap",
-              marginBottom: 8,
-            }}
-          >
-            <h2 className="display-m">The eight founders</h2>
-            <Link href="/team/" className="link-rule" style={{ fontSize: 14.5 }}>
-              Full profiles →
-            </Link>
-          </div>
-          <p className="data muted" style={{ margin: "0 0 clamp(24px, 3vw, 40px)", fontSize: 12 }}>
-            Names, designations and portraits not yet supplied.
-          </p>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(8, minmax(0, 1fr))",
-              gap: "clamp(12px, 1.5vw, 24px)",
-            }}
-            data-founders="row"
-          >
-            {Array.from({ length: 8 }, (_, i) => {
-              const n = String(i + 1).padStart(2, "0");
-              return (
-                <div key={n}>
-                  <Octagon>
-                    <span style={{ fontFamily: "var(--mono)", fontSize: 15, color: "var(--gold-deep)" }}>
-                      {n}
-                    </span>
-                  </Octagon>
-                  <div style={{ marginTop: 14, borderTop: "1px solid rgba(2,45,61,.18)", paddingTop: 10 }}>
-                    <div
-                      style={{
-                        fontFamily: "var(--display)",
-                        fontWeight: 600,
-                        fontSize: 14,
-                        letterSpacing: "-.015em",
-                        color: "var(--ink-74)",
-                      }}
-                    >
-                      Founder {n}
-                    </div>
-                    <div
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: 10,
-                        letterSpacing: ".1em",
-                        textTransform: "uppercase",
-                        color: "var(--ink-74)",
-                        marginTop: 5,
-                      }}
-                    >
-                      Name pending
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>

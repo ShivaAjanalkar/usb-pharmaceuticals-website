@@ -146,10 +146,6 @@ export default function HomePage() {
                 <dd>Private Limited</dd>
               </div>
               <div className="spec-row">
-                <dt>Founders</dt>
-                <dd>08</dd>
-              </div>
-              <div className="spec-row">
                 <dt>Manufacturing</dt>
                 <dd style={{ color: "var(--gold-deep)" }}>Third-party, qualified</dd>
               </div>
@@ -189,8 +185,8 @@ export default function HomePage() {
                 }}
               >
                 USB Pharmaceuticals Pvt. Ltd. is a new Indian pharmaceutical
-                company formed by eight professionals with working experience
-                across formulation selection, regulatory documentation, quality
+                company formed by professionals with working experience across
+                formulation selection, regulatory documentation, quality
                 assurance, distribution and field marketing.
               </p>
               <p className="prose" style={{ maxWidth: "66ch" }}>

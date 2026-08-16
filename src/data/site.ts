@@ -24,7 +24,6 @@ export const NAV = [
   { href: "/products/", label: "Products" },
   { href: "/services/", label: "Services" },
   { href: "/quality/", label: "Quality" },
-  { href: "/team/", label: "Our Team" },
   { href: "/careers/", label: "Careers" },
   { href: "/contact/", label: "Contact" },
 ] as const;
@@ -59,7 +58,6 @@ export const FOOTER_COLUMNS = [
     head: "Job seekers",
     links: [
       { href: "/careers/", label: "Careers" },
-      { href: "/team/", label: "Our team" },
       { href: "/about/", label: "About USB" },
     ],
   },
