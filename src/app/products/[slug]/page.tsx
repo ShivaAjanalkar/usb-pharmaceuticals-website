@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PrescribingPanel from "@/components/PrescribingPanel";
+import { PackDiagram, SegmentIcon } from "@/components/icons";
 import { PRODUCTS, getProduct } from "@/data/products";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -66,8 +67,19 @@ export default async function ProductPage({ params }: Params) {
           >
             <h1
               className="display-l"
-              style={{ fontSize: "clamp(32px, 4.4vw, 66px)", lineHeight: 0.98 }}
+              style={{
+                fontSize: "clamp(32px, 4.4vw, 66px)",
+                lineHeight: 0.98,
+                display: "flex",
+                alignItems: "center",
+                gap: "clamp(14px, 1.6vw, 24px)",
+              }}
             >
+              <SegmentIcon
+                category={product.category}
+                size={44}
+                className="product-mark"
+              />
               {product.brand}
             </h1>
             <span
@@ -123,6 +135,24 @@ export default async function ProductPage({ params }: Params) {
                 </dd>
               </div>
             </dl>
+
+            {/* A diagram of the pack, drawn from the pack data itself — the
+                honest alternative to product photography that does not exist
+                yet. Captioned so it is never mistaken for artwork. */}
+            <figure className="pack-figure">
+              <p className="eyebrow" style={{ marginBottom: 18 }}>
+                Pack presentation
+              </p>
+              <PackDiagram
+                units={product.units}
+                form={product.form}
+                className="pack-diagram"
+              />
+              <figcaption>
+                Diagram · {product.pack} · {product.form.toLowerCase()}. Schematic
+                only — pack artwork is not final and is not shown here.
+              </figcaption>
+            </figure>
 
             <p className="attribution" style={{ margin: "28px 0 0", fontSize: 11.5, lineHeight: 1.75 }}>
               <span className="notice__label">MANUFACTURED BY · </span>

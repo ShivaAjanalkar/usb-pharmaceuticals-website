@@ -1,10 +1,13 @@
 import Image from "next/image";
-import { asset } from "@/lib/asset";
 import Link from "next/link";
+import Entrance from "@/components/Entrance";
+import Lattice from "@/components/Lattice";
 import Octagon from "@/components/Octagon";
 import Reveal from "@/components/Reveal";
+import { SegmentIcon } from "@/components/icons";
 import { PRODUCTS, SEGMENTS } from "@/data/products";
 import { ATTRIBUTION } from "@/data/site";
+import { asset } from "@/lib/asset";
 
 const STRENGTHS = [
   [
@@ -38,12 +41,17 @@ export default function HomePage() {
     <>
       {/* — hero ————————————————————————————————————————————————————— */}
       <section className="section" style={{ position: "relative", overflow: "hidden" }}>
+        <Lattice />
         <div
           className="shell"
-          style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.62fr) minmax(0, 1fr)" }}
+          style={{
+            position: "relative",
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1.62fr) minmax(0, 1fr)",
+          }}
           data-hero
         >
-          <div
+          <Entrance
             style={{
               padding: "clamp(48px, 6.5vw, 104px) clamp(28px, 4vw, 72px) clamp(44px, 5vw, 84px) 0",
               borderRight: "1px solid var(--rule)",
@@ -51,41 +59,54 @@ export default function HomePage() {
           >
             <p
               className="eyebrow eyebrow-rule"
-              style={{ marginBottom: "clamp(24px, 3vw, 44px)" }}
+              style={{ marginBottom: "clamp(24px, 3vw, 44px)", "--i": 0 } as React.CSSProperties}
             >
               Incorporated in India · Pvt. Ltd.
             </p>
-            <h1 className="display-xl" style={{ marginBottom: "clamp(20px, 2.4vw, 34px)" }}>
+            <h1
+              className="display-xl"
+              style={{ marginBottom: "clamp(20px, 2.4vw, 34px)", "--i": 1 } as React.CSSProperties}
+            >
               USB Pharmaceuticals<span style={{ color: "var(--gold)" }}>.</span>
             </h1>
             <p
-              style={{
-                fontFamily: "var(--display)",
-                fontWeight: 500,
-                fontSize: "clamp(19px, 2vw, 30px)",
-                lineHeight: 1.22,
-                letterSpacing: "-.022em",
-                margin: "0 0 clamp(22px, 2.6vw, 36px)",
-                maxWidth: "16ch",
-              }}
+              style={
+                {
+                  "--i": 2,
+                  fontFamily: "var(--display)",
+                  fontWeight: 500,
+                  fontSize: "clamp(19px, 2vw, 30px)",
+                  lineHeight: 1.22,
+                  letterSpacing: "-.022em",
+                  margin: "0 0 clamp(22px, 2.6vw, 36px)",
+                  maxWidth: "16ch",
+                } as React.CSSProperties
+              }
             >
               Universal Science for Better Life
             </p>
             <p
-              style={{
-                fontSize: "clamp(17px, 1.3vw, 20px)",
-                lineHeight: 1.6,
-                margin: "0 0 clamp(30px, 3.4vw, 46px)",
-                maxWidth: "56ch",
-                color: "var(--ink-82)",
-                textWrap: "pretty",
-              }}
+              style={
+                {
+                  "--i": 3,
+                  fontSize: "clamp(17px, 1.3vw, 20px)",
+                  lineHeight: 1.6,
+                  margin: "0 0 clamp(30px, 3.4vw, 46px)",
+                  maxWidth: "56ch",
+                  color: "var(--ink-82)",
+                  textWrap: "pretty",
+                } as React.CSSProperties
+              }
             >
               We select, market and supply finished pharmaceutical formulations in
               India — manufactured for us, under our documented quality
               oversight, by qualified third-party manufacturing partners.
             </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <div
+              style={
+                { "--i": 4, display: "flex", flexWrap: "wrap", gap: 12 } as React.CSSProperties
+              }
+            >
               <Link href="/contact/" className="btn btn--primary">
                 Start a partnership enquiry <span className="btn__arrow">→</span>
               </Link>
@@ -93,7 +114,7 @@ export default function HomePage() {
                 View the product catalogue
               </Link>
             </div>
-          </div>
+          </Entrance>
 
           <div
             style={{
@@ -208,7 +229,7 @@ export default function HomePage() {
             <h2 className="display-m">Four core strengths</h2>
             <p className="eyebrow">02 · Capability</p>
           </div>
-          <div className="hairline-grid hairline-grid--4">
+          <div className="hairline-grid hairline-grid--4" data-stagger>
             {STRENGTHS.map(([title, body], i) => (
               <article key={title} className="tile">
                 <span className="tile__index">{String(i + 1).padStart(2, "0")}</span>
@@ -244,10 +265,11 @@ export default function HomePage() {
             Segments are named pharmacologically — never by indication.
           </p>
 
-          <div className="hairline-grid hairline-grid--4 hairline-grid--mist">
-            {SEGMENTS.map((segment, i) => (
+          <div className="hairline-grid hairline-grid--4 hairline-grid--mist" data-stagger>
+            {SEGMENTS.map((segment) => (
               <div
                 key={segment.name}
+                className="segment-tile"
                 style={{
                   padding: "clamp(18px, 2vw, 26px)",
                   minHeight: 186,
@@ -257,10 +279,12 @@ export default function HomePage() {
                   gap: 16,
                 }}
               >
-                <Octagon size={42} style={{ background: "rgba(205,166,101,.55)" }}>
-                  <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--gold-deep)" }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+                <Octagon size={56} style={{ background: "rgba(205,166,101,.55)" }}>
+                  <SegmentIcon
+                    category={segment.name}
+                    size={28}
+                    className="segment-icon"
+                  />
                 </Octagon>
                 <div>
                   <div

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { IconSearch, SegmentIcon } from "@/components/icons";
 import { CATEGORIES, FORMS, LETTERS, PRODUCTS } from "@/data/products";
 
 const ALL = "All";
@@ -65,14 +66,17 @@ export default function Catalogue() {
         <div className="filters">
           <div className="filters__bar">
             <span>Filter catalogue</span>
-            <input
-              type="search"
-              className="filters__search"
-              value={query}
-              placeholder="Search brand, composition, category…"
-              aria-label="Search the catalogue"
-              onChange={(e) => setQuery(e.target.value)}
-            />
+            <div className="filters__field">
+              <IconSearch size={15} />
+              <input
+                type="search"
+                className="filters__search"
+                value={query}
+                placeholder="Search brand, composition, category…"
+                aria-label="Search the catalogue"
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </div>
           </div>
 
           <div style={{ padding: "0 16px 4px" }}>
@@ -82,7 +86,7 @@ export default function Catalogue() {
           </div>
 
           <div className="filters__foot">
-            <span>
+            <span role="status" aria-live="polite">
               {String(rows.length).padStart(2, "0")} of{" "}
               {String(PRODUCTS.length).padStart(2, "0")} records
             </span>
@@ -113,7 +117,12 @@ export default function Catalogue() {
               {rows.length ? (
                 rows.map((p) => (
                   <tr key={p.id}>
-                    <td style={{ color: "var(--gold-deep)" }}>{p.letter}</td>
+                    <td>
+                      <span className="row-mark">
+                        <SegmentIcon category={p.category} size={20} />
+                        {p.letter}
+                      </span>
+                    </td>
                     <td>{p.brand}</td>
                     <td style={{ minWidth: 260 }}>{p.composition}</td>
                     <td>{p.form}</td>
@@ -128,7 +137,9 @@ export default function Catalogue() {
                       </span>
                     </td>
                     <td style={{ textAlign: "right" }}>
-                      <Link href={`/products/${p.slug}/`}>{p.id} →</Link>
+                      <Link href={`/products/${p.slug}/`}>
+                        {p.id} <span>→</span>
+                      </Link>
                     </td>
                   </tr>
                 ))
@@ -154,22 +165,23 @@ export default function Catalogue() {
         <div className="catalogue-cards">
           {rows.map((p) => (
             <Link key={p.id} href={`/products/${p.slug}/`}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 12,
-                  alignItems: "baseline",
-                }}
-              >
+              <div className="card-head">
                 <span
                   style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
                     fontFamily: "var(--display)",
                     fontWeight: 600,
                     fontSize: 17,
                     letterSpacing: "-.018em",
                   }}
                 >
+                  <SegmentIcon
+                    category={p.category}
+                    size={22}
+                    className="segment-icon"
+                  />
                   {p.brand}
                 </span>
                 <span

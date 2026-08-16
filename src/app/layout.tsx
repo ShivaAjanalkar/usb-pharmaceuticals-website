@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, Instrument_Sans, Source_Serif_4 } from "next/font/google";
+import PageTransition from "@/components/PageTransition";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { SITE } from "@/data/site";
@@ -50,7 +51,7 @@ export default function RootLayout({
       <body>
         <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
           <SiteHeader />
-          <main style={{ flex: 1 }}>{children}</main>
+          <PageTransition>{children}</PageTransition>
           <SiteFooter />
         </div>
       </body>

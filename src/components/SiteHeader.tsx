@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { asset } from "@/lib/asset";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { IconMenu } from "@/components/icons";
 import { NAV, SITE } from "@/data/site";
+import { asset } from "@/lib/asset";
 
 function isCurrent(href: string, pathname: string) {
   if (href === "/") return pathname === "/";
@@ -15,9 +16,31 @@ function isCurrent(href: string, pathname: string) {
 export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // The masthead condenses once the page has moved under it.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Close the mobile panel on navigation, and on Escape.
+  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
     <>
+      <a className="skip-link" href="#content">
+        Skip to content
+      </a>
+
       <div className="topbar">
         <div className="shell topbar__inner">
           <span>{SITE.tagline}</span>
@@ -25,19 +48,15 @@ export default function SiteHeader() {
         </div>
       </div>
 
-      <header className="masthead">
+      <header className="masthead" data-scrolled={scrolled}>
         <div className="shell masthead__inner">
-          <Link
-            href="/"
-            className="masthead__brand"
-            aria-label={`${SITE.name} — home`}
-          >
+          <Link href="/" className="masthead__brand" aria-label={`${SITE.name} — home`}>
             <Image
               src={asset("/assets/usb-icon-copper.png")}
               alt=""
               width={42}
               height={42}
-              style={{ height: 42, width: "auto" }}
+              style={{ height: scrolled ? 34 : 42, width: "auto" }}
               priority
             />
             <span />
@@ -46,7 +65,7 @@ export default function SiteHeader() {
               alt={SITE.name}
               width={200}
               height={25}
-              style={{ height: 25, width: "auto" }}
+              style={{ height: scrolled ? 21 : 25, width: "auto" }}
               priority
             />
           </Link>
@@ -70,19 +89,21 @@ export default function SiteHeader() {
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
           >
+            <IconMenu open={open} size={18} />
             {open ? "Close" : "Menu"}
           </button>
         </div>
 
         {open && (
           <nav className="nav-panel" id="mobile-nav" aria-label="Primary mobile">
-            {NAV.map((item) => {
+            {NAV.map((item, i) => {
               const current = isCurrent(item.href, pathname);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={current ? "page" : undefined}
+                  style={{ "--i": i } as React.CSSProperties}
                   onClick={() => setOpen(false)}
                 >
                   {item.label}

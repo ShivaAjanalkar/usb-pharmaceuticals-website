@@ -35,6 +35,21 @@
   --shell: 1440px;
   --gutter: clamp(20px, 4vw, 72px);
   --section-y: clamp(40px, 4.6vw, 80px);
+
+  /* — motion —
+     One easing curve for everything that moves, so the whole interface
+     decelerates the same way. No bounce, no overshoot, no parallax: the
+     brief rules out excessive animation, and a company this young should
+     not appear to be performing. */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 0.16s;
+  --dur: 0.28s;
+  --dur-slow: 0.62s;
+
+  /* The DNA double helix, reduced to a hairline. Two strands, one tile,
+     repeated down the left gutter of long-form pages. */
+  --helix: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='80' viewBox='0 0 14 80'%3E%3Cg fill='none' stroke='%23CDA665' stroke-opacity='.55' stroke-width='1'%3E%3Cpath d='M2 0C2 10 12 10 12 20C12 30 2 30 2 40C2 50 12 50 12 60C12 70 2 70 2 80'/%3E%3Cpath d='M12 0C12 10 2 10 2 20C2 30 12 30 12 40C12 50 2 50 2 60C2 70 12 70 12 80'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 *,
@@ -95,6 +110,45 @@ a:hover {
   outline-offset: 3px;
 }
 
+/* Keyboard users reach the content without walking the whole nav. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 200;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 20px;
+}
+.skip-link:focus {
+  left: var(--gutter);
+  top: 12px;
+  color: var(--paper);
+}
+
+/* An octagonal lattice, sized to the hero and faded almost to nothing. It
+   gives the empty half of the page a texture without pretending to be a
+   photograph. */
+.lattice {
+  position: absolute;
+  inset: 0;
+  /* An <svg> carries an intrinsic 300×150, so inset alone will not stretch it. */
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.55;
+  color: var(--gold);
+  mask-image: radial-gradient(70% 80% at 82% 45%, #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(70% 80% at 82% 45%, #000 0%, transparent 70%);
+}
+@media (max-width: 900px) {
+  .lattice { opacity: 0.35; mask-image: radial-gradient(90% 40% at 70% 12%, #000 0%, transparent 72%); }
+}
+
 /* — the octagonal grammar ————————————————————————————————————————————— */
 
 .oct {
@@ -137,10 +191,14 @@ a:hover {
 .split--even { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .split--wide { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
 
-/* The DNA helix, reduced to a structural spine in the left gutter. */
+/* The DNA helix as a rule, not a picture: a structural spine down the left
+   gutter of long-form pages. Never a floating illustration. */
 .spine {
-  border-left: 1px solid rgba(205, 166, 101, 0.4);
-  padding-left: clamp(20px, 3vw, 48px);
+  padding-left: clamp(28px, 3vw, 48px);
+  background-image: var(--helix);
+  background-repeat: repeat-y;
+  background-position: left top;
+  background-size: 14px 80px;
 }
 
 /* — type ——————————————————————————————————————————————————————————————— */
@@ -247,7 +305,10 @@ a:hover {
   font-family: var(--mono);
   font-size: 13px;
   color: var(--gold);
+  transition: transform var(--dur) var(--ease);
 }
+.btn:hover .btn__arrow,
+.link-rule:hover .btn__arrow { transform: translateX(4px); }
 
 .btn--primary {
   background: var(--ink);
@@ -290,7 +351,10 @@ a:hover {
 }
 .btn--outline-light:hover { border-color: var(--paper); color: var(--paper); }
 
+/* The rule under a text link is a pseudo-element so it can sweep on hover
+   rather than simply changing colour. */
 .link-rule {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -299,10 +363,25 @@ a:hover {
   font-size: 15px;
   color: var(--ink);
   text-decoration: none;
-  border-bottom: 2px solid var(--gold);
   padding-bottom: 4px;
+  border-bottom: 2px solid rgba(205, 166, 101, 0.4);
+  transition: color var(--dur) var(--ease);
+}
+.link-rule::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease);
 }
 .link-rule:hover { color: var(--gold-deep); }
+.link-rule:hover::after,
+.link-rule:focus-visible::after { transform: scaleX(1); }
 
 .chip {
   font-family: var(--mono);
@@ -373,7 +452,15 @@ a:hover {
   flex-direction: column;
   gap: 12px;
   min-height: 260px;
+  transition: background-color var(--dur) var(--ease);
 }
+
+/* A segment tile lifts its icon a little when pointed at — the only hover
+   affordance on an otherwise static grid. */
+.segment-tile { transition: background-color var(--dur) var(--ease); }
+.segment-tile .oct-frame { transition: transform var(--dur) var(--ease); }
+.segment-tile:hover { background: var(--paper); }
+.segment-tile:hover .oct-frame { transform: translateY(-3px); }
 .tile__index {
   font-family: var(--mono);
   font-size: 11px;
@@ -502,6 +589,12 @@ a:hover {
   z-index: 60;
   background: var(--paper);
   border-bottom: 2px solid var(--ink);
+  transition: box-shadow var(--dur) var(--ease);
+}
+/* Once the page has moved under it, the masthead sits on a shadow so the
+   2px rule does not read as part of the content. */
+.masthead[data-scrolled="true"] {
+  box-shadow: 0 10px 30px -18px rgba(2, 45, 61, 0.55);
 }
 .masthead__inner {
   display: flex;
@@ -515,7 +608,10 @@ a:hover {
   gap: 14px;
   padding: 16px 0;
   text-decoration: none;
+  transition: padding var(--dur) var(--ease);
 }
+.masthead[data-scrolled="true"] .masthead__brand { padding-block: 10px; }
+.masthead__brand img { transition: height var(--dur) var(--ease); }
 .masthead__brand span {
   display: block;
   width: 2px;
@@ -528,6 +624,7 @@ a:hover {
   align-items: stretch;
 }
 .nav a {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 0 clamp(9px, 0.95vw, 15px);
@@ -539,19 +636,30 @@ a:hover {
   text-decoration: none;
   white-space: nowrap;
   color: var(--ink-66);
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  transition: color 0.18s, border-color 0.18s;
+  transition: color var(--dur) var(--ease);
 }
-.nav a:hover { color: var(--ink); border-bottom-color: rgba(205, 166, 101, 0.45); }
-.nav a[aria-current="page"] {
-  color: var(--ink);
-  font-weight: 600;
-  border-bottom-color: var(--gold);
+/* The active/hover rule sweeps in from the left instead of blinking on. */
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease), background-color var(--dur) var(--ease);
 }
+.nav a:hover { color: var(--ink); }
+.nav a:hover::after { transform: scaleX(1); background: rgba(205, 166, 101, 0.5); }
+.nav a[aria-current="page"] { color: var(--ink); font-weight: 600; }
+.nav a[aria-current="page"]::after { transform: scaleX(1); background: var(--gold); }
 
 .nav-toggle {
   display: none;
+  align-items: center;
+  gap: 9px;
   align-self: center;
   background: var(--ink);
   color: var(--paper);
@@ -565,10 +673,20 @@ a:hover {
   clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
 }
 
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
 .nav-panel {
   border-top: 1px solid rgba(2, 45, 61, 0.16);
   background: var(--paper);
   display: grid;
+  animation: panel-in var(--dur) var(--ease) both;
+}
+.nav-panel a {
+  animation: rise 0.4s var(--ease-out) both;
+  animation-delay: calc(30ms * var(--i, 0));
 }
 .nav-panel a {
   display: flex;
@@ -652,19 +770,35 @@ a:hover {
   text-transform: uppercase;
   color: var(--gold);
 }
-.filters__search {
+.filters__field {
+  position: relative;
+  display: flex;
+  align-items: center;
   flex: 1 1 260px;
   max-width: 420px;
+  min-width: 0;
+  color: var(--gold);
+}
+.filters__field svg { position: absolute; left: 12px; pointer-events: none; }
+.filters__search {
+  width: 100%;
   min-width: 0;
   background: rgba(252, 252, 250, 0.07);
   border: 1px solid rgba(205, 166, 101, 0.42);
   color: var(--paper);
   font-family: var(--mono);
   font-size: 12.5px;
-  padding: 10px 12px;
+  padding: 10px 12px 10px 36px;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
   clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
 }
+.filters__search:focus {
+  outline: none;
+  background: rgba(252, 252, 250, 0.12);
+  border-color: var(--gold);
+}
 .filters__search::placeholder { color: rgba(252, 252, 250, 0.5); }
+.filters__search::-webkit-search-cancel-button { filter: invert(1); opacity: 0.6; }
 .filters__row {
   display: grid;
   grid-template-columns: 130px minmax(0, 1fr);
@@ -740,10 +874,32 @@ a:hover {
   vertical-align: middle;
   color: var(--ink);
 }
+.catalogue-table tbody tr {
+  transition: background-color var(--dur) var(--ease);
+}
 .catalogue-table tbody tr:nth-child(even) { background: var(--mist); }
-.catalogue-table tbody tr:hover { background: rgba(205, 166, 101, 0.16); }
-.catalogue-table a { color: var(--gold-deep); text-decoration: none; white-space: nowrap; }
+.catalogue-table tbody tr:hover,
+.catalogue-table tbody tr:focus-within { background: rgba(205, 166, 101, 0.16); }
+.catalogue-table a {
+  color: var(--gold-deep);
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 .catalogue-table a:hover { text-decoration: underline; }
+.catalogue-table a span { transition: transform var(--dur) var(--ease); }
+.catalogue-table tbody tr:hover a span { transform: translateX(4px); }
+
+/* Row identity: the segment icon sits in the first cell, so the eye can sort
+   the catalogue by shape before it reads a word of it. */
+.catalogue-table td .row-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold-deep);
+}
 
 .schedule-tag {
   border: 1px solid rgba(205, 166, 101, 0.7);
@@ -760,14 +916,36 @@ a:hover {
 
 .catalogue-cards { display: none; gap: 2px; background: var(--ink); border: 2px solid var(--ink); }
 .catalogue-cards a {
+  position: relative;
   background: var(--paper);
   padding: 18px;
   display: grid;
   gap: 12px;
   text-decoration: none;
   color: var(--ink);
+  transition: background-color var(--dur) var(--ease);
 }
-.catalogue-cards a:hover { background: rgba(205, 166, 101, 0.12); }
+/* A copper edge unrolls down the left of the card on press. */
+.catalogue-cards a::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--gold);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--dur) var(--ease);
+}
+.catalogue-cards a:hover,
+.catalogue-cards a:focus-visible { background: rgba(205, 166, 101, 0.1); }
+.catalogue-cards a:hover::before,
+.catalogue-cards a:focus-visible::before { transform: scaleY(1); }
+.catalogue-cards .card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
 
 /* — forms —————————————————————————————————————————————————————————————— */
 
@@ -809,18 +987,99 @@ textarea.control { resize: vertical; line-height: 1.55; }
   clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 18px, 100% calc(100% - 18px), calc(100% - 18px) 100%, 18px 100%, 0 calc(100% - 18px), 0 18px);
 }
 
+/* — icons —————————————————————————————————————————————————————————————— */
+
+.icon-menu { display: block; }
+.icon-menu path {
+  transform-origin: center;
+  transition: transform var(--dur) var(--ease);
+}
+.icon-menu[data-open="true"] .icon-menu__top { transform: translateY(4px) rotate(45deg); }
+.icon-menu[data-open="true"] .icon-menu__bottom { transform: translateY(-4px) rotate(-45deg); }
+
+.segment-icon { color: var(--gold-deep); }
+
+.pack-diagram {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+}
+
+.pack-figure {
+  margin: clamp(28px, 3vw, 40px) 0 0;
+  padding-top: clamp(24px, 2.6vw, 32px);
+  border-top: 1px solid var(--rule);
+}
+.pack-figure figcaption {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.75;
+  letter-spacing: 0.06em;
+  color: var(--ink-74);
+  margin-top: 14px;
+  max-width: 46ch;
+}
+
+.product-mark { color: var(--gold); flex: none; }
+
 /* — motion ————————————————————————————————————————————————————————————— */
 
-.reveal {
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── the visibility contract ───────────────────────────────────────────────
+   Nothing here may make content *visible*; it may only animate content that
+   is already visible by default. Every hidden state lives behind a
+   `data-armed` attribute that JavaScript sets at runtime, and it is only set
+   once JS has confirmed it can also un-set it. So: no JS, throttled rAF,
+   a background tab, a stalled animation — the page still reads. */
+
+/* The single orchestrated page-load sequence, used on the Home hero only. */
+[data-armed="true"].orchestrate > * {
+  animation: rise 0.7s var(--ease-out) both;
+  animation-delay: calc(60ms * var(--i, 0));
+}
+
+.reveal[data-armed="true"] {
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 0.62s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.62s cubic-bezier(0.2, 0.7, 0.3, 1);
+  transition: opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
 }
-.reveal[data-shown="true"] { opacity: 1; transform: none; }
+.reveal[data-armed="true"][data-shown="true"] { opacity: 1; transform: none; }
+
+/* Children of a revealed section arrive in sequence rather than together. */
+.reveal[data-armed="true"] [data-stagger] > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  transition-delay: calc(45ms * var(--i, 0));
+}
+.reveal[data-armed="true"][data-shown="true"] [data-stagger] > * {
+  opacity: 1;
+  transform: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal[data-armed="true"],
+  .reveal[data-armed="true"] [data-stagger] > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  [data-armed="true"].orchestrate > * { animation: none; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
 
 /* — responsive ————————————————————————————————————————————————————————— */

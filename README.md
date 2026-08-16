@@ -49,6 +49,61 @@ cut at 45° with `clip-path`, derived from the octagonal monogram. Portraits,
 photo slots and partner logos sit inside `.oct-frame`, which reproduces the
 logo's double outline.
 
+## The graphic system (instead of photography)
+
+The brief rules out stock photography of labs, pills and doctors, and the
+company has no facility to photograph and no product to shoot. So the imagery
+is drawn, not sourced — all of it in `src/components/icons.tsx` and
+`src/components/Lattice.tsx`:
+
+- **Eight therapeutic segment marks**, one per category, on a 48 grid built
+  from 90°/45° lines and true circles. 1.5 stroke, mitred joins, butt caps —
+  the same vocabulary as the monogram. They appear on the home segment tiles,
+  in the catalogue's first column, on catalogue cards, and beside each product
+  title, so the portfolio can be sorted by shape before a word is read.
+- **Pack diagrams**, generated from each product's own `units` and `form`. The
+  number of wells *is* the pack size and the well shape follows the dosage
+  form, so `Estraval` draws a 7×4 blister and `Pregnill-Kit` draws one large
+  well plus four behind a divider. Every diagram is captioned as a schematic —
+  it is never presented as pack artwork.
+- **An octagonal lattice** behind the home hero, masked to a soft falloff at
+  low opacity, giving the empty half of the page texture without pretending to
+  be a photograph.
+- **The DNA helix as a rule.** Two hairline strands tiled down the left gutter
+  of long-form pages (`.spine`), at low opacity — the structural spine the
+  brief asked for, never a floating illustration.
+
+## Motion, and the visibility contract
+
+One easing curve, one duration scale, no bounce, no parallax, no scroll-jacking.
+The budget is what the brief allows: one orchestrated load sequence on the home
+hero, scroll-reveal on section openers, and micro-interactions on controls.
+There is deliberately **no cross-page transition**.
+
+The rule that matters is in `globals.css`:
+
+> Nothing in the motion layer may make content *visible*; it may only animate
+> content that is already visible by default.
+
+Every hidden state sits behind a `data-armed` attribute that JavaScript sets at
+runtime, and only once it has confirmed it can also unset it (`src/lib/motion.ts`
+checks reduced-motion **and** `document.visibilityState`). This is not
+theoretical — three real failure modes were found and fixed building it:
+
+1. `animation-fill-mode: both` on the element wrapping all page content held it
+   at `opacity: 0` until the animation ran. CSS animations do not advance in a
+   background tab, so opening the site in a new tab left **the entire page
+   blank**. The transition was removed outright.
+2. `IntersectionObserver` only notifies on threshold crossings, so a section
+   carried from below the fold to above it in one frame — an in-page anchor, a
+   restored scroll position, a fast trackpad flick — produced no callback and
+   stayed invisible for good. `Reveal` uses a scroll check that cannot miss.
+3. A section armed while the tab is visible and then backgrounded would freeze
+   mid-transition. `Reveal` listens for `visibilitychange` and shows immediately.
+
+Net effect: no JS, throttled rAF, a background tab, a stalled animation, or
+`prefers-reduced-motion` — the page still reads in full.
+
 ## Regulatory constraints baked into the code
 
 These are not styling decisions — changing them has legal consequences in India.

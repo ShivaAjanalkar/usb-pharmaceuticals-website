@@ -32,6 +32,7 @@ jobs:
         # A project site is served from /<repo>, so the app needs that base path.
         env:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
         run: npm run build
 
       - name: Disable Jekyll processing

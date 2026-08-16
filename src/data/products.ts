@@ -24,6 +24,8 @@ export type Product = {
   form: DosageForm;
   pack: string;
   category: Category;
+  /** Units in one pack — drives the pack diagram. A kit counts every tablet. */
+  units: number;
   /** Drugs and Cosmetics Rules, 1945 schedule. Pending final confirmation. */
   schedule: string;
   letter: string;
@@ -49,6 +51,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-001",
     slug: "letrofit",
+    units: 5,
     brand: "Letrofit",
     alternates: ["Letrogest", "Letrozova"],
     composition: "Letrozole IP 2.5 mg",
@@ -61,6 +64,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-002",
     slug: "prolactra-d",
+    units: 4,
     brand: "Prolactra-D",
     alternates: ["Lactovia-D2", "Prolactis"],
     composition: "Cabergoline IP 0.5 mg",
@@ -73,6 +77,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-003",
     slug: "drospira",
+    units: 21,
     brand: "Drospira",
     alternates: ["Spironex", "Drosentra"],
     composition: "Drospirenone IP 3 mg + Ethinylestradiol IP 0.03 mg",
@@ -85,6 +90,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-004",
     slug: "ce-35",
+    units: 21,
     brand: "CE-35",
     alternates: ["Androgest", "Cyprozen-35"],
     composition: "Cyproterone acetate IP 2 mg + Ethinylestradiol IP 0.035 mg",
@@ -97,6 +103,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-005",
     slug: "megalo-d",
+    units: 15,
     brand: "Megalo-D",
     alternates: ["Follfile-D", "MLP-D"],
     composition:
@@ -110,6 +117,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-006",
     slug: "pregnill-kit",
+    units: 5,
     brand: "Pregnill-Kit",
     alternates: ["Pregfree", "Preventa"],
     composition:
@@ -123,6 +131,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-007",
     slug: "endora",
+    units: 10,
     brand: "Endora",
     alternates: ["Norexa", "Gestiva"],
     composition: "Norethisterone acetate IP 5 mg",
@@ -135,6 +144,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-008",
     slug: "megastron",
+    units: 10,
     brand: "Megastron",
     alternates: ["ProGest", "Mpro-10"],
     composition: "Medroxyprogesterone acetate IP 10 mg",
@@ -147,6 +157,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-009",
     slug: "desogest",
+    units: 21,
     brand: "Desogest",
     alternates: ["Desentra", "Femtop"],
     composition: "Desogestrel IP 0.15 mg + Ethinylestradiol IP 0.02 mg",
@@ -159,6 +170,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-010",
     slug: "tramexa",
+    units: 10,
     brand: "Tramexa",
     alternates: ["HemoStop", "Tramef", "Hemofix"],
     composition: "Tranexamic acid IP 500 mg + Mefenamic acid IP 250 mg",
@@ -171,6 +183,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-011",
     slug: "sapasmora",
+    units: 10,
     brand: "Sapasmora",
     alternates: ["Sapsmex", "Drotamef"],
     composition: "Drotaverine hydrochloride 80 mg + Mefenamic acid IP 250 mg",
@@ -183,6 +196,7 @@ export const PRODUCTS: Product[] = [
   {
     id: "USB-P-012",
     slug: "estraval",
+    units: 28,
     brand: "Estraval",
     alternates: ["Valestra", "Estragen"],
     composition: "Estradiol valerate IP 2 mg",
