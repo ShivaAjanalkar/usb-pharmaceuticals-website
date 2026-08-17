@@ -107,11 +107,8 @@ export default function HomePage() {
                 { "--i": 4, display: "flex", flexWrap: "wrap", gap: 12 } as React.CSSProperties
               }
             >
-              <Link href="/contact/" className="btn btn--primary">
-                Start a partnership enquiry <span className="btn__arrow">→</span>
-              </Link>
-              <Link href="/products/" className="btn btn--secondary">
-                View the product catalogue
+              <Link href="/products/" className="btn btn--primary">
+                View the product catalogue <span className="btn__arrow">→</span>
               </Link>
             </div>
           </Entrance>
